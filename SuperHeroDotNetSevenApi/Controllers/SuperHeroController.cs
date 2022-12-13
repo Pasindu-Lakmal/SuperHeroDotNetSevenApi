@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SuperHeroDotNetSevenApi.Models;
+using SuperHeroDotNetSevenApi.Services.SuperHeroService;
 
 namespace SuperHeroDotNetSevenApi.Controllers
 {
@@ -7,26 +7,9 @@ namespace SuperHeroDotNetSevenApi.Controllers
     [ApiController]
     public class SuperHeroController : ControllerBase
     {
-        private static List<SuperHero> superHeros = new List<SuperHero>
+        public SuperHeroController(ISuperHeroService superHeroService)
         {
-            new SuperHero
-            {
-                Id = 1,
-                Name = "Spider Man",
-                FirstName = "Peter",
-                LastName = "Parker",
-                Place ="New York City"
-            },
-            new SuperHero
-            {
-                Id = 2,
-                Name = "Iron Man",
-                FirstName = "Tony",
-                LastName = "Stark",
-                Place ="Malibu"
-            }
-        };
-        
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> GetAllHeroes()
@@ -36,15 +19,15 @@ namespace SuperHeroDotNetSevenApi.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SuperHero>> GetSingleHero(int id)
-        { 
+        {
             var hero = superHeros.Find(x => x.Id == id);
-            if(hero is null)
+            if (hero is null)
             {
-                return NotFound("Sorry, but this hero doesen't exist.");            
+                return NotFound("Sorry, but this hero doesen't exist.");
             }
             return Ok(hero);
-        }  
-        
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero)
         { 
@@ -72,15 +55,7 @@ namespace SuperHeroDotNetSevenApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<SuperHero>>> DeleteHero(int id)
         {
-            var hero = superHeros.Find(x => x.Id == id);
-            if (hero is null)
-            {
-                return NotFound("Sorry, but this hero doesen't exist.");
-            }
-
-            superHeros.Remove(hero);
-
-            return Ok(superHeros);
+        
         }
     }
 }
